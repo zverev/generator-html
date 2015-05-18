@@ -1,0 +1,6 @@
+{
+  "name": "generator-html",
+  "dependencies": {
+    "yeoman-generator": "^0.18.9"
+  }
+}
