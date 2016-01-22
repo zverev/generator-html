@@ -4,6 +4,7 @@ module.exports = generators.Base.extend({
     constructor: function() {
         generators.Base.apply(this, arguments);
         this.option('name');
+        this.option('index');
     },
     prompting: {
         createFiles: function() {
@@ -26,10 +27,11 @@ module.exports = generators.Base.extend({
     writing: function() {
         var name = this.options.name;
         var widgetName = name;
+        var htmlFileName = (this.options.index ? 'index.html' : name + '.html');
         var scriptFileName = (name || 'script') + '.js';
         var stylesFileName = (name || 'styles') + '.css';
 
-        this.fs.copyTpl(this.templatePath('index.html'), this.destinationPath('index.html'), {
+        this.fs.copyTpl(this.templatePath('index.html'), this.destinationPath(htmlFileName), {
             scriptFileName: scriptFileName,
             stylesFileName: stylesFileName,
             projectName: name || 'The app'
