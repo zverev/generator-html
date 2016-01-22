@@ -7,8 +7,7 @@ module.exports = generators.Base.extend({
     },
     prompting: {
         createFiles: function() {
-            if (this.options.name) {
-                doCreateFiles.call(this, this.options.name);
+            if (typeof this.options.name === 'string' && this.options.name) {
                 return;
             }
 
@@ -19,23 +18,23 @@ module.exports = generators.Base.extend({
                 message: 'Your project name',
                 default: '' // Default to current folder name
             }, function(answers) {
-                doCreateFiles.call(this, answers.name);
+                this.options.name = answers.name;
                 done();
             }.bind(this));
-
-            function doCreateFiles(name) {
-                var widgetName = name;
-                var scriptFileName = (name || 'script') + '.js';
-                var stylesFileName = (name || 'styles') + '.css';
-
-                this.fs.copyTpl(this.templatePath('index.html'), this.destinationPath('index.html'), {
-                    scriptFileName: scriptFileName,
-                    stylesFileName: stylesFileName,
-                    projectName: name || 'The app'
-                });
-                this.fs.copy(this.templatePath('script.js'), this.destinationPath(scriptFileName));
-                this.fs.copy(this.templatePath('styles.css'), this.destinationPath(stylesFileName));
-            }
         }
+    },
+    writing: function() {
+        var name = this.options.name;
+        var widgetName = name;
+        var scriptFileName = (name || 'script') + '.js';
+        var stylesFileName = (name || 'styles') + '.css';
+
+        this.fs.copyTpl(this.templatePath('index.html'), this.destinationPath('index.html'), {
+            scriptFileName: scriptFileName,
+            stylesFileName: stylesFileName,
+            projectName: name || 'The app'
+        });
+        this.fs.copy(this.templatePath('script.js'), this.destinationPath(scriptFileName));
+        this.fs.copy(this.templatePath('styles.css'), this.destinationPath(stylesFileName));
     }
 });
